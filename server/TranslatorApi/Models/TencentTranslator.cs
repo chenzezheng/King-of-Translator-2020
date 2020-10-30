@@ -22,23 +22,23 @@ namespace TranslatorApi.Models.Tencent
         public Translation data { get; set; }
     }
 
-    public class Translator
+    public class Translator : ITranslate
     {
         private const string appId = "2149663649";
         private const string appKey = "7DBzl7mGEklY3Zqj";
         public static string source;
         public static string target;
         
-        public static TranslationResult Translate(string text, string from, string to)
+        public string Translate(string text, string from, string to)
         {
             source = from;
             target = to;
             var data = GetResult(text.Trim());
-            return Post("https://api.ai.qq.com/fcgi-bin/nlp/nlp_texttranslate", data); 
-          
+            TranslationResult result = Post("https://api.ai.qq.com/fcgi-bin/nlp/nlp_texttranslate", data);
+            return result.data.target_text;
         }
 
-        public static string GetResult(string value)
+        private static string GetResult(string value)
         {
             value = HttpUtility.UrlEncode(value, Encoding.UTF8).ToUpper();
             var sdic = new SortedDictionary<string, string>

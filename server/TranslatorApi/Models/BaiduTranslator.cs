@@ -31,7 +31,7 @@ namespace TranslatorApi.Models.Baidu
         //这里是数组的原因是百度翻译支持多个单词或多段文本的翻译，在发送的字段q中用换行符（\n）分隔
         public Translation[] Trans_result { get; set; }
     }
-    public class Translator
+    public class Translator : ITranslate
     {
         private static string GetMD5WithString(string input)
         {
@@ -53,7 +53,7 @@ namespace TranslatorApi.Models.Baidu
             return sBuilder.ToString();
         }
 
-        public static TranslationResult Translate(string text, string languageFrom, string languageTo)
+        public string Translate(string text, string from, string to)
         {
             string appId = "20200526000471917";
             string password = "2xyqypZkJ_am2OMp7Cqk";
@@ -66,8 +66,8 @@ namespace TranslatorApi.Models.Baidu
             //url
             string url = String.Format("http://api.fanyi.baidu.com/api/trans/vip/translate?q={0}&from={1}&to={2}&appid={3}&salt={4}&sign={5}",
                 HttpUtility.UrlEncode(text, Encoding.UTF8),
-                languageFrom,
-                languageTo,
+                from,
+                to,
                 appId,
                 randomNum,
                 md5Sign
@@ -83,7 +83,9 @@ namespace TranslatorApi.Models.Baidu
             }
             //解析json
             TranslationResult result = JsonConvert.DeserializeObject<TranslationResult>(jsonResult);
-            return result;
+            string result_string = "";
+            foreach (Translation str in result.Trans_result) result_string += str.Dst;
+            return result_string;
         }
     }
 }

@@ -16,9 +16,9 @@ namespace TranslatorApi.Models.Youdao
         public string[] translation { get; set; }
     }
 
-    public class Translator
+    public class Translator : ITranslate
     {
-        public static TranslationResult Translate(string text, string from, string to)
+        public string Translate(string text, string from, string to)
         {
             Dictionary<String, String> dic = new Dictionary<String, String>();
             string url = "https://openapi.youdao.com/api";
@@ -39,7 +39,10 @@ namespace TranslatorApi.Models.Youdao
             dic.Add("appKey", appKey);
             dic.Add("salt", salt);
             dic.Add("sign", sign);
-            return Post(url, dic);
+            TranslationResult result = Post(url, dic);
+            string result_string = "";
+            foreach (string str in result.translation) result_string += str;
+            return result_string;
         }
 
         protected static string ComputeHash(string input, HashAlgorithm algorithm)

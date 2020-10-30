@@ -52,18 +52,18 @@ namespace TranslatorApi.Services
 
         public TranslationResults GetTranslationResult()
         {
-            TranslationResults results = new TranslationResults();
-            TranslatorApi.Models.Baidu.TranslationResult BaiduResult = TranslatorApi.Models.Baidu.Translator.Translate(text, from, to);
             foreach(string key in BaiduTable.Keys)
             {
-                if (BaiduTable[key] == BaiduResult.From) from = key;
-                if (BaiduTable[key] == BaiduResult.To) to = key;
+                if (BaiduTable[key] == from) from = key;
+                if (BaiduTable[key] == to) to = key;
             }
-            TranslatorApi.Models.Youdao.TranslationResult YoudaoResult = TranslatorApi.Models.Youdao.Translator.Translate(text, YoudaoTable[from], YoudaoTable[to]);
-            TranslatorApi.Models.Tencent.TranslationResult TencentResult = TranslatorApi.Models.Tencent.Translator.Translate(text, TencentTable[from], TencentTable[to]);
-            foreach (TranslatorApi.Models.Baidu.Translation str in BaiduResult.Trans_result) results.BaiduResult += str.Dst;
-            foreach (string str in YoudaoResult.translation) results.YoudaoResult += str;
-            results.TencentResult = TencentResult.data.target_text;
+            TranslationResults results = new TranslationResults();
+            TranslatorApi.Models.Baidu.Translator baiduTranslator = new TranslatorApi.Models.Baidu.Translator();
+            TranslatorApi.Models.Youdao.Translator youdaoTranslator = new TranslatorApi.Models.Youdao.Translator();
+            TranslatorApi.Models.Tencent.Translator tencentTranslator = new TranslatorApi.Models.Tencent.Translator();
+            results.BaiduResult = baiduTranslator.Translate(text, BaiduTable[from], BaiduTable[to]);
+            results.YoudaoResult = youdaoTranslator.Translate(text, YoudaoTable[from], YoudaoTable[to]);
+            results.TencentResult = tencentTranslator.Translate(text, TencentTable[from], TencentTable[to]);
             return results;
         }
     }
