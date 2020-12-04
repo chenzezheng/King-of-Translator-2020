@@ -14,8 +14,8 @@ namespace TranslatorUI.Models
         public TranslationResults()
         {  
             BaiduResult = "";
-        YoudaoResult = "";
-        TencentResult = "";
+            YoudaoResult = "";
+            TencentResult = "";
     }
     }
 }

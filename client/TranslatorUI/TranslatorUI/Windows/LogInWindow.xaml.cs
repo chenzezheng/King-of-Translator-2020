@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TranslatorUI.Models;
 using TranslatorUI.Pages;
+using TranslatorUI.Service;
 
 namespace TranslatorUI.Windows
 {
@@ -23,12 +24,14 @@ namespace TranslatorUI.Windows
     public partial class LogInWindow : Window
     {
         public bool IsLogIn { get; set; }
-        public User LoginUser { get; set; }
+        //public User LoginUser { get; set; }
+        public UserService UserService { get; set; }
         public LogInWindow()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            LoginUser = new User();
+            UserService = new UserService();
+           // LoginUser = new User();
         }
 
         private void SignUp_btn_Click(object sender, RoutedEventArgs e)
@@ -39,7 +42,7 @@ namespace TranslatorUI.Windows
 
         private void LogIn_btn_Click(object sender, RoutedEventArgs e)
         {
-            IsLogIn = LoginUser.SignIn(inputUsername.Text, FloatingPasswordBox.Password);
+            IsLogIn = this.UserService.SignIn(inputUsername.Text, FloatingPasswordBox.Password);
             if(inputUsername.Text==""||inputUsername.Text==null)
             {
                 tipWindow tw=new tipWindow("请输入用户名");

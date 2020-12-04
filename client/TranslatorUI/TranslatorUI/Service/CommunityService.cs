@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace TranslatorUI.Service
 {
-    public class CommunityService
+    public class CommunityService                                   //该类封装了对翻译社区的操作
     {
         //public static string BaseUrl = "http://localhost:5000/";
         public static string BaseUrl = "http://39.108.211.7/";
