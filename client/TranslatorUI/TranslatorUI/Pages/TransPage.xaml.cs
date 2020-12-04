@@ -24,10 +24,8 @@ namespace TranslatorUI.Pages
     /// </summary>
     public partial class TransPage : Page
     {
-        private readonly RisCaptureLib.ScreenCaputre screenCaputre = new RisCaptureLib.ScreenCaputre();
-        private Size? lastSize;
-        List<string> language = new List<string>();
-        public TransPage()
+        private static TransPage instance;
+        private TransPage()
         {
             InitializeComponent();
             language.Add("Chinese");
@@ -37,10 +35,21 @@ namespace TranslatorUI.Pages
             language.Add("French");
             this.languageBeforeTrans.DataContext = language;
             this.languageAfterTrans.ItemsSource = language;
-
             screenCaputre.ScreenCaputred += OnScreenCaputred;
-           screenCaputre.ScreenCaputreCancelled += OnScreenCaputreCancelled;
+            screenCaputre.ScreenCaputreCancelled += OnScreenCaputreCancelled;
         }
+        public static TransPage getInstance()
+        {
+            if (instance == null)
+            {
+                instance = new TransPage();
+            }
+            return instance;
+        }
+
+        private readonly RisCaptureLib.ScreenCaputre screenCaputre = new RisCaptureLib.ScreenCaputre();
+        private Size? lastSize;
+        List<string> language = new List<string>();
 
         private void OnScreenCaputreCancelled(object sender, System.EventArgs e)
         {

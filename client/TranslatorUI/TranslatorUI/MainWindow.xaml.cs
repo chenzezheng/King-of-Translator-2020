@@ -22,13 +22,13 @@ namespace TranslatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Uri CommunityPage { get; set; }
+        public Uri CommunityPageUri { get; set; }
         public CommunityPage CP { get; set; }
         public TransPage TP { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            TP = new TransPage();
+            TP = TransPage.getInstance();
             mainFrame.Content = TP;
         }
         private void btnNav_Click(object sender, RoutedEventArgs e)
@@ -36,27 +36,13 @@ namespace TranslatorUI
             Button btn = sender as Button;
             if (btn.Tag.ToString() == "CommunityPage")
             {
-                if (CP == null)
-                {
-                    CP = new CommunityPage();
-                    mainFrame.Content = CP;
-                }
-                else
-                {
-                    mainFrame.Content = CP;
-                }
+                CP = CommunityPage.getInstance();
+                mainFrame.Content = CP;
             }
             else
             {
-                if (TP == null)
-                {
-                    TP = new TransPage();
-                    mainFrame.Content = TP;
-                }
-                else
-                {
-                    mainFrame.Content = TP;
-                }
+                TP = TransPage.getInstance();
+                mainFrame.Content = TP;
             }
 
             //      CommunityPage = new Uri("Pages/" + btn.Tag.ToString() + ".xaml", UriKind.Relative);
@@ -65,17 +51,9 @@ namespace TranslatorUI
         }
         public void SearchInCommunity(string keyword)
         {
-            if (CP == null)
-            {
-                CP = new CommunityPage();
-                mainFrame.Content = CP;
-                CP.SearchKeyWord(keyword);
-            }
-            else
-            {
-                mainFrame.Content = CP;
-                CP.SearchKeyWord(keyword);
-            }
+            CP = CommunityPage.getInstance();
+            mainFrame.Content = CP;
+            CP.SearchKeyWord(keyword);
         }
 
         //      CommunityPage = new Uri("Pages/" + btn.Tag.ToString() + ".xaml", UriKind.Relative);

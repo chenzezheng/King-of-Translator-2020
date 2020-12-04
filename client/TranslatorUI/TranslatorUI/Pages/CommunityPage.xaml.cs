@@ -24,38 +24,56 @@ namespace TranslatorUI.Pages
     /// </summary>
     public partial class CommunityPage : Page
     {
-        public User User = new User();
+        //public User User = new User();
 
+        private static CommunityPage instance;
+        private CommunityPage() 
+        {
+            InitializeComponent();
+            UserService = new UserService();
+            this.CurrentQList = 1;
+            this.Page = 1;
+            PageLabel.Text = "当前页面:" + Page.ToString();
+            this.QuestionList = CommunityService.GetAllQuestions(Page);
+            this.QuesItem.ItemsSource = QuestionList;
+        }
+
+        public static CommunityPage getInstance()
+        {
+            if (instance == null)
+            {
+                instance = new CommunityPage();
+            }
+            return instance;
+        }
+
+        public UserService UserService { get; set; }
         public List<Question> QuestionList { get; set; }
         public List<DisplayAnswer> DisplayAnswers { get; set; }
         public int CurrentQuesIndex { get; set; }
         public Question CurrentQuestion { get; set; }
-     public int Page { get; set; }
+        public int Page { get; set; }
         public int CurrentQList { get; set; }  //1:全部提问 2：我的提问 3：我的回答 4：搜索
-        public CommunityPage()
+       /* public CommunityPage()
         {
-            InitializeComponent();
-            this.CurrentQList = 1;
-            this.Page =1;
-            PageLabel.Text = "当前页面:"+Page.ToString();
-            this.QuestionList = CommunityService.GetAllQuestions(Page);
-            this.QuesItem.ItemsSource = QuestionList;
+            
             //  this.QuesItem.ItemsSource = QuestionList;
             //  this.AnsItem.ItemsSource = AnswerList;
             // this.ques_info.DataContext = QuestionList[0];
         }
+        */
         private void Login_Click(object sender, RoutedEventArgs e)                                 //登录按钮
         {
             LogInWindow logIn = new LogInWindow();
             logIn.ShowDialog();
             if (logIn.IsLogIn == true)
             {
-                this.User = logIn.LoginUser;
+                this.UserService.User = logIn.UserService.User;
                 LoginButton.Visibility = Visibility.Hidden;
                 userInfo.Visibility = Visibility.Visible;
                 coin.Visibility = Visibility.Visible;
-                userInfo.Text = "当前用户：" + User.UserId;
-                coin.Text = "积分：" + User.Coin.ToString();
+                userInfo.Text = "当前用户：" + this.UserService.User.UserId;
+                coin.Text = "积分：" + this.UserService.User.Coin.ToString();
             }
         }
 
@@ -71,12 +89,12 @@ namespace TranslatorUI.Pages
             {
                 DisplayAnswer displayAnswer = new DisplayAnswer();
                 displayAnswer.convert(answer);
-                if (QuestionList[QuesItem.SelectedIndex].UserId == User.UserId && QuestionList[QuesItem.SelectedIndex].Solved == false)
+                if (QuestionList[QuesItem.SelectedIndex].UserId == this.UserService.User.UserId && QuestionList[QuesItem.SelectedIndex].Solved == false)
                 {
                     displayAnswer.ShowAdoptBtn = true;
                 }
                 else { displayAnswer.ShowAdoptBtn = false; }
-                if (answer.UserId == User.UserId)
+                if (answer.UserId == this.UserService.User.UserId)
                 {
                     displayAnswer.IsMyAnswer = true;
                 }
@@ -90,7 +108,7 @@ namespace TranslatorUI.Pages
         {
             var curItem = ((ListBoxItem)AnsItem.ContainerFromElement((Button)sender)).Content;
             DisplayAnswer disp = curItem as DisplayAnswer;
-            bool success = User.Adopt(disp.AnswerId,CurrentQuestion.QuestionId);
+            bool success = this.UserService.Adopt(disp.AnswerId,CurrentQuestion.QuestionId);
             if (success == true)
             {
                 foreach (DisplayAnswer a in DisplayAnswers)
@@ -120,7 +138,7 @@ namespace TranslatorUI.Pages
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)                             //点赞
         {
-            if(User.UserId==null)
+            if(this.UserService.User.UserId==null)
             {
                 tipWindow warning = new tipWindow("请先登录");
                 warning.ShowDialog();
@@ -130,13 +148,13 @@ namespace TranslatorUI.Pages
             var curItem = ((ListBoxItem)AnsItem.ContainerFromElement((System.Windows.Controls.Primitives.ToggleButton)sender)).Content;
             DisplayAnswer disp = curItem as DisplayAnswer;
 
-            if(disp.UserId==User.UserId)
+            if(disp.UserId== this.UserService.User.UserId)
             {
                 tipWindow warning = new tipWindow("无法给自己点赞");
                 warning.ShowDialog();
                 return;
             }
-            bool success = User.Like(disp.AnswerId);
+            bool success = this.UserService.Like(disp.AnswerId);
             if (success)
             {
                 foreach (DisplayAnswer da in DisplayAnswers)
@@ -166,13 +184,13 @@ namespace TranslatorUI.Pages
             
             if (CurrentQuestion == null)
                 return;
-            else if(User.UserId==null)
+            else if(this.UserService.User.UserId==null)
             {
                 tipWindow warning = new tipWindow("请先登录");
                 warning.ShowDialog();
                 return;
             }
-            else if(CurrentQuestion.UserId==User.UserId)
+            else if(CurrentQuestion.UserId== this.UserService.User.UserId)
             {
                 tipWindow warning = new tipWindow("不能回答自己的提问");
                 warning.ShowDialog();
@@ -190,10 +208,10 @@ namespace TranslatorUI.Pages
                 warning.ShowDialog();
                 return;
             }
-            bool success = User.Answer(AnswerContent.Text,CurrentQuestion.QuestionId);
+            bool success = this.UserService.Answer(AnswerContent.Text,CurrentQuestion.QuestionId);
             if (success)
             {
-                Answer newAnswer = new Answer(AnswerContent.Text, DateTime.Now, User.UserId, false, -1, 0);
+                Answer newAnswer = new Answer(AnswerContent.Text, DateTime.Now, this.UserService.User.UserId, false, -1, 0);
                 QuestionList[CurrentQuesIndex].Answers.Add(newAnswer);
                 DisplayAnswer disp = new DisplayAnswer();
                 disp.convert(newAnswer);
@@ -215,30 +233,30 @@ namespace TranslatorUI.Pages
 
         private void AskQuestionBtn_Click(object sender, RoutedEventArgs e)         //提问
         {
-            if(User.UserId==null)
+            if(this.UserService.User.UserId==null)
             {
                 tipWindow warning = new tipWindow("请先登录");
                 warning.ShowDialog();
                 return;
             }
-            askQuestionWindow ask = new askQuestionWindow(User, Keyword.Text);
+            askQuestionWindow ask = new askQuestionWindow(this.UserService.User, Keyword.Text);
             ask.ShowDialog();
             if (ask.HasAsked == true)
             {
-                bool success = User.Ask(ask.QContent, ask.Reward);
+                bool success = this.UserService.Ask(ask.QContent, ask.Reward);
                 if (success)
                 {
-                    Question newQuestion = new Question(ask.QContent, ask.Reward, User.UserId, false, DateTime.Now, new List<Answer>());
+                    Question newQuestion = new Question(ask.QContent, ask.Reward, this.UserService.User.UserId, false, DateTime.Now, new List<Answer>());
                     QuestionList.Insert(0, newQuestion);
                     if (QuestionList.Count > 15)
                         QuestionList.RemoveAt(14);
-                    this.User.Coin -= ask.Reward;
+                    this.UserService.User.Coin -= ask.Reward;
                     this.QuesItem.ItemsSource = null;
                     this.QuesItem.ItemsSource = QuestionList;
                     CurrentQuestion = QuestionList[0];
                     this.ques_info.DataContext = QuestionList[0];
                     this.AnsItem.ItemsSource = new List<DisplayAnswer>();
-                    coin.Text = "积分：" + User.Coin.ToString();
+                    coin.Text = "积分：" + this.UserService.User.Coin.ToString();
                 }
                 else
                 {
@@ -262,7 +280,7 @@ namespace TranslatorUI.Pages
 
         private void MyQuestion_Click(object sender, RoutedEventArgs e)     //我的提问
         {
-            if (User.UserId == null)
+            if (this.UserService.User.UserId == null)
             {
                 tipWindow warning = new tipWindow("请先登录");
                 warning.ShowDialog();
@@ -272,13 +290,13 @@ namespace TranslatorUI.Pages
             this.Page = 1;
             this.CurrentQList = 2;
             PageLabel.Text = "当前页面:" + Page.ToString();
-            this.QuestionList = this.User.GetMyQuestions(this.Page);
+            this.QuestionList = this.UserService.GetMyQuestions(this.Page);
             this.QuesItem.ItemsSource = null;
             this.QuesItem.ItemsSource = QuestionList;
         }
         private void myAnswer_Click(object sender, RoutedEventArgs e)   //我回答过的提问
         {
-            if (User.UserId == null)
+            if (this.UserService.User.UserId == null)
             {
                 tipWindow warning = new tipWindow("请先登录");
                 warning.ShowDialog();
@@ -288,7 +306,7 @@ namespace TranslatorUI.Pages
             this.Page = 1;
             this.CurrentQList = 3;
             PageLabel.Text = "当前页面:" + Page.ToString();
-            this.QuestionList = this.User.GetMyAnswers(this.Page);
+            this.QuestionList = this.UserService.GetMyAnswers(this.Page);
             this.QuesItem.ItemsSource = null;
             this.QuesItem.ItemsSource = QuestionList;
         }
@@ -308,10 +326,10 @@ namespace TranslatorUI.Pages
                     this.QuestionList = CommunityService.GetAllQuestions(Page);
                     break;
                 case 2:
-                    this.QuestionList = this.User.GetMyQuestions(this.Page);
+                    this.QuestionList = this.UserService.GetMyQuestions(this.Page);
                     break;
                 case 3:
-                    this.QuestionList = this.User.GetMyAnswers(this.Page);
+                    this.QuestionList = this.UserService.GetMyAnswers(this.Page);
                     break;
                 case 4:
                     this.QuestionList = CommunityService.SearchQuestion(Keyword.Text,this.Page);
@@ -338,7 +356,7 @@ namespace TranslatorUI.Pages
                     isSuccess = true;
                     break;
                 case 2:
-                    qlist = this.User.GetMyQuestions(this.Page);
+                    qlist = this.UserService.GetMyQuestions(this.Page);
                     if (qlist == null)
                     {
                         isSuccess = false;
@@ -348,7 +366,7 @@ namespace TranslatorUI.Pages
                     isSuccess = true;
                     break;
                 case 3:
-                    qlist = this.User.GetMyAnswers(this.Page);
+                    qlist = this.UserService.GetMyAnswers(this.Page);
                     if(qlist==null)
                     {
                         isSuccess = false;

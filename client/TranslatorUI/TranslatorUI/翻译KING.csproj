@@ -74,12 +74,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstract\AbstractAnswer.cs" />
     <Compile Include="DBModels\DBAnswer.cs" />
     <Compile Include="DBModels\DBQuestion.cs" />
     <Compile Include="DBModels\DBUser.cs" />
-    <Compile Include="Factory\AnswerFactory.cs" />
-    <Compile Include="Factory\QuestionFactory.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\DisplayAnswer.cs" />
     <Compile Include="Models\Question.cs" />
@@ -89,6 +86,7 @@
     <Compile Include="OCR\ScreenShotImage.cs" />
     <Compile Include="Service\CommunityService.cs" />
     <Compile Include="Service\TranslateService.cs" />
+    <Compile Include="Service\UserService.cs" />
     <Compile Include="Windows\tipWindow.xaml.cs">
       <DependentUpon>tipWindow.xaml</DependentUpon>
     </Compile>

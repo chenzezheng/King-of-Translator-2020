@@ -22,8 +22,8 @@ namespace TranslatorUI.Models
         }
         public DisplayAnswer()
         {
-            // this.adoptButton = false;
-            // this.ismyanswer = false;
+             this.ShowAdoptBtn = false;
+             this.IsMyAnswer = false;
         }
     }
 }
