@@ -5,18 +5,11 @@ using System.Text;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using TranslatorApi.Models.YoudaoResult;
 
-namespace TranslatorApi.Models.Youdao
+namespace TranslatorApi.Models
 {
-    public class TranslationResult
-    {
-        //错误码，翻译结果无法正常返回
-        public string errorCode { get; set; }
-        public string query { get; set; }
-        public string[] translation { get; set; }
-    }
-
-    public class Translator : ITranslate
+    public class YoudaoTranslator : AbstractTranslator
     {
         public string Translate(string text, string from, string to)
         {

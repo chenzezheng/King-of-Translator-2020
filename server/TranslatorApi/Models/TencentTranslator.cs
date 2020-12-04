@@ -6,23 +6,12 @@ using System.Web;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using TranslatorApi.Models.TencentResult;
 
-namespace TranslatorApi.Models.Tencent
+namespace TranslatorApi.Models
 {
-    public class Translation
-    {
-        public string source_text { get; set; }
-        public string target_text { get; set; }
-    }
 
-    public class TranslationResult
-    {
-        public string ret { get; set; }
-        public string msg { get; set; }
-        public Translation data { get; set; }
-    }
-
-    public class Translator : ITranslate
+    public class TencentTranslator : AbstractTranslator
     {
         private const string appId = "2149663649";
         private const string appKey = "7DBzl7mGEklY3Zqj";
@@ -38,7 +27,7 @@ namespace TranslatorApi.Models.Tencent
             return result.data.target_text;
         }
 
-        private static string GetResult(string value)
+        private string GetResult(string value)
         {
             value = HttpUtility.UrlEncode(value, Encoding.UTF8).ToUpper();
             var sdic = new SortedDictionary<string, string>
@@ -53,17 +42,17 @@ namespace TranslatorApi.Models.Tencent
             sdic.Add("sign", GetSign(sdic));
             return GetUrlValue(sdic);
         }
-        private static string GetTimeStamp()
+        private string GetTimeStamp()
         {
             return DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
         }
 
-        private static string GetRandomCode()
+        private string GetRandomCode()
         {
             return Guid.NewGuid().ToString("N");
         }
 
-        private static string GetSign(SortedDictionary<string, string> sdic)
+        private string GetSign(SortedDictionary<string, string> sdic)
         {
             var str = $"{GetUrlValue(sdic)}&app_key={appKey}";
             using (var md5csp = new MD5CryptoServiceProvider())
@@ -74,7 +63,7 @@ namespace TranslatorApi.Models.Tencent
             }
         }
 
-        private static string GetUrlValue(SortedDictionary<string, string> sdic)
+        private string GetUrlValue(SortedDictionary<string, string> sdic)
         {
             var sb = new StringBuilder();
             foreach (var item in sdic)
@@ -87,7 +76,7 @@ namespace TranslatorApi.Models.Tencent
             }
             return sb.ToString();
         }
-        private static TranslationResult Post(string url, string data)
+        private TranslationResult Post(string url, string data)
         {
             try
             {
