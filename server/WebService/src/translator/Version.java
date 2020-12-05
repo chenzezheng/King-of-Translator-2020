@@ -1,19 +1,19 @@
-package example;
+package translator;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
 
 @WebService()
-public class HelloWorld {
+public class Version {
   @WebMethod
-  public String sayHelloWorldFrom(String from) {
-    String result = "Hello, world, from " + from;
+  public String getVersion(String os) {
+    String result = "King of Translator v1.3 for " + os;
     System.out.println(result);
     return result;
   }
   public static void main(String[] argv) {
-    Object implementor = new HelloWorld ();
-    String address = "http://localhost:9000/HelloWorld";
+    Object implementor = new Version();
+    String address = "http://localhost:9000/Version";
     Endpoint.publish(address, implementor);
   }
 }
