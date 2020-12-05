@@ -24,8 +24,6 @@ namespace TranslatorUI.Pages
     /// </summary>
     public partial class CommunityPage : Page
     {
-        //public User User = new User();
-
         private static CommunityPage instance;
         private CommunityPage() 
         {
@@ -37,8 +35,7 @@ namespace TranslatorUI.Pages
             this.QuestionList = CommunityService.GetAllQuestions(Page);
             this.QuesItem.ItemsSource = QuestionList;
         }
-
-        public static CommunityPage getInstance()
+        public static CommunityPage GetInstance()
         {
             if (instance == null)
             {
@@ -46,7 +43,6 @@ namespace TranslatorUI.Pages
             }
             return instance;
         }
-
         public UserService UserService { get; set; }
         public List<Question> QuestionList { get; set; }
         public List<DisplayAnswer> DisplayAnswers { get; set; }
@@ -208,7 +204,7 @@ namespace TranslatorUI.Pages
                 warning.ShowDialog();
                 return;
             }
-            bool success = this.UserService.Answer(AnswerContent.Text,CurrentQuestion.QuestionId);
+            bool success = this.UserService.Answer(AnswerContent.Text,CurrentQuestion.QuestionId);     //调用回答
             if (success)
             {
                 Answer newAnswer = new Answer(AnswerContent.Text, DateTime.Now, this.UserService.User.UserId, false, -1, 0);
@@ -243,7 +239,7 @@ namespace TranslatorUI.Pages
             ask.ShowDialog();
             if (ask.HasAsked == true)
             {
-                bool success = this.UserService.Ask(ask.QContent, ask.Reward);
+                bool success = this.UserService.Ask(ask.QContent, ask.Reward);       //调用提问
                 if (success)
                 {
                     Question newQuestion = new Question(ask.QContent, ask.Reward, this.UserService.User.UserId, false, DateTime.Now, new List<Answer>());

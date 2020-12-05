@@ -28,7 +28,7 @@ namespace TranslatorUI
         public MainWindow()
         {
             InitializeComponent();
-            TP = TransPage.getInstance();
+            TP = TransPage.GetInstance();
             mainFrame.Content = TP;
         }
         private void btnNav_Click(object sender, RoutedEventArgs e)
@@ -36,30 +36,21 @@ namespace TranslatorUI
             Button btn = sender as Button;
             if (btn.Tag.ToString() == "CommunityPage")
             {
-                CP = CommunityPage.getInstance();
+                CP = CommunityPage.GetInstance();
                 mainFrame.Content = CP;
             }
             else
             {
-                TP = TransPage.getInstance();
+                TP = TransPage.GetInstance();
                 mainFrame.Content = TP;
             }
-
-            //      CommunityPage = new Uri("Pages/" + btn.Tag.ToString() + ".xaml", UriKind.Relative);
-            //       mainFrame.Navigate(CommunityPage);
-
         }
         public void SearchInCommunity(string keyword)
         {
-            CP = CommunityPage.getInstance();
+            CP = CommunityPage.GetInstance();
             mainFrame.Content = CP;
             CP.SearchKeyWord(keyword);
-        }
-
-        //      CommunityPage = new Uri("Pages/" + btn.Tag.ToString() + ".xaml", UriKind.Relative);
-        //       mainFrame.Navigate(CommunityPage);
-
-    
+        }    
     }
 
 }

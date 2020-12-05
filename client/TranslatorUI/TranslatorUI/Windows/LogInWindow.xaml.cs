@@ -40,9 +40,9 @@ namespace TranslatorUI.Windows
             signUp.ShowDialog();
         }
 
-        private void LogIn_btn_Click(object sender, RoutedEventArgs e)
+        private void LogIn_btn_Click(object sender, RoutedEventArgs e)           //登录按钮
         {
-            IsLogIn = this.UserService.SignIn(inputUsername.Text, FloatingPasswordBox.Password);
+            IsLogIn = this.UserService.SignIn(inputUsername.Text, FloatingPasswordBox.Password);   //调用登录
             if(inputUsername.Text==""||inputUsername.Text==null)
             {
                 tipWindow tw=new tipWindow("请输入用户名");

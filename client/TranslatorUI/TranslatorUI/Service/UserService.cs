@@ -15,12 +15,10 @@ namespace TranslatorUI.Service
     {
         public string BaseUrl = "http://39.108.211.7/";
         public User User { get; set; }
-
         public UserService()
         {
             User = new User();
         }
-
         public bool SignIn(string userName, string password)  //登录
         {
             HttpClient client = new HttpClient();
@@ -44,7 +42,6 @@ namespace TranslatorUI.Service
                 return true;
             }
         }
-
         public bool Ask(string content, int reward)  //提问
         {
             //传过去生成问题，同时传回questionid，生成question,返回question
@@ -58,7 +55,6 @@ namespace TranslatorUI.Service
             bool success = task.Result.IsSuccessStatusCode;
             return success;
         }
-
         public bool Answer(string content, int questionid)    //回答
         {
             //传过去生成回答，同时传回answerid，生成answer，返回answer
@@ -72,7 +68,6 @@ namespace TranslatorUI.Service
             bool success = task.Result.IsSuccessStatusCode;
             return success;
         }
-
         public List<Question> GetMyQuestions(int page)  //我的提问，分页版
         {
             HttpClient client = new HttpClient();
@@ -93,7 +88,6 @@ namespace TranslatorUI.Service
                 return qlist;
             }
         }
-
         public List<Question> GetMyAnswers(int page)   //我的回答，分页版
         {
             HttpClient client = new HttpClient();

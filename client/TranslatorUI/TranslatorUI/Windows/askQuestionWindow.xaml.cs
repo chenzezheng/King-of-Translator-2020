@@ -33,7 +33,7 @@ namespace TranslatorUI.Windows
             ContentTextBox.Text = text;
         }
 
-        private void Ask_Click(object sender, RoutedEventArgs e)
+        private void Ask_Click(object sender, RoutedEventArgs e)                 //提问按钮
         {
             if (RewardTextBox.Text == "" || RewardTextBox.Text == null)
             {

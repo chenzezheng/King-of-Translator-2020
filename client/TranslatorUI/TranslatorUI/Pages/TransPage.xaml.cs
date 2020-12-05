@@ -38,7 +38,7 @@ namespace TranslatorUI.Pages
             screenCaputre.ScreenCaputred += OnScreenCaputred;
             screenCaputre.ScreenCaputreCancelled += OnScreenCaputreCancelled;
         }
-        public static TransPage getInstance()
+        public static TransPage GetInstance()
         {
             if (instance == null)
             {
@@ -79,7 +79,6 @@ namespace TranslatorUI.Pages
             Thread.Sleep(300);
            screenCaputre.StartCaputre(30, lastSize);
         }
-
         private void CommunityTrans_btn_Click(object sender, RoutedEventArgs e)
         {
             if (textBeforeTrans.Text == "" || textBeforeTrans.Text == null)
