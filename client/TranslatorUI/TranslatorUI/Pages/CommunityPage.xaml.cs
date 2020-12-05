@@ -24,8 +24,8 @@ namespace TranslatorUI.Pages
     /// </summary>
     public partial class CommunityPage : Page
     {
-        private static CommunityPage instance;
-        private CommunityPage() 
+        private static CommunityPage instance;                          //创建CommunityPage的一个对象
+        private CommunityPage()                               
         {
             InitializeComponent();
             UserService = new UserService();
@@ -35,7 +35,7 @@ namespace TranslatorUI.Pages
             this.QuestionList = CommunityService.GetAllQuestions(Page);
             this.QuesItem.ItemsSource = QuestionList;
         }
-        public static CommunityPage GetInstance()
+        public static CommunityPage GetInstance()                       //获取唯一可用的对象
         {
             if (instance == null)
             {

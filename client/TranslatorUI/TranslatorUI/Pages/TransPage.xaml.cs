@@ -24,7 +24,7 @@ namespace TranslatorUI.Pages
     /// </summary>
     public partial class TransPage : Page
     {
-        private static TransPage instance;
+        private static TransPage instance;                                //创建TransPage的一个对象
         private TransPage()
         {
             InitializeComponent();
@@ -38,7 +38,7 @@ namespace TranslatorUI.Pages
             screenCaputre.ScreenCaputred += OnScreenCaputred;
             screenCaputre.ScreenCaputreCancelled += OnScreenCaputreCancelled;
         }
-        public static TransPage GetInstance()
+        public static TransPage GetInstance()                           //获取唯一可用对象
         {
             if (instance == null)
             {

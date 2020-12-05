@@ -28,7 +28,7 @@ namespace TranslatorUI
         public MainWindow()
         {
             InitializeComponent();
-            TP = TransPage.GetInstance();
+            TP = TransPage.GetInstance();                     
             mainFrame.Content = TP;
         }
         private void btnNav_Click(object sender, RoutedEventArgs e)
@@ -36,12 +36,12 @@ namespace TranslatorUI
             Button btn = sender as Button;
             if (btn.Tag.ToString() == "CommunityPage")
             {
-                CP = CommunityPage.GetInstance();
+                CP = CommunityPage.GetInstance();                           //获取唯一CommunityPage的对象
                 mainFrame.Content = CP;
             }
             else
             {
-                TP = TransPage.GetInstance();
+                TP = TransPage.GetInstance();                             //获取唯一TransPage的对象
                 mainFrame.Content = TP;
             }
         }
